@@ -6,6 +6,7 @@
 
 #include "globals.h"
 #include "type.h"
+#include "mkdir_create.h"
 
 int init()
 {
@@ -106,7 +107,7 @@ int main(int argc, char *argv[])
         }
 
         while (1) {
-                printf("input command : [ls|cd|pwd|quit] ");
+                printf("input command : [ls|cd|pwd|mkdir|quit] ");
                 fgets(line, 128, stdin);
                 line[strlen(line) - 1] = 0;
 
@@ -123,7 +124,8 @@ int main(int argc, char *argv[])
                         chdir(pathname);
                 if (strcmp(cmd, "pwd") == 0)
                         pwd(running->cwd);
-
+                if(strcmp(cmd, "mkdir") == 0)
+                        mkdir_local(pathname);
                 if (strcmp(cmd, "quit") == 0)
                         quit();
         }
