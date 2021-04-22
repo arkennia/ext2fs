@@ -43,7 +43,8 @@ int ls_file(MINODE *mip, char *name)
         char *time = ctime(&atime);
         time[strlen(time) - 1] = '\0';
         get_mode_string(mip->INODE.i_mode);
-        printf("%s %d %d %s %s \n", mode_buffer, mip->INODE.i_links_count, mip->INODE.i_size, time, name);
+        printf("%s %d %d %s %s \n", mode_buffer, mip->INODE.i_links_count, mip->INODE.i_size, time,
+               name);
         return 0;
 }
 
@@ -128,7 +129,7 @@ int rpwd(MINODE *wd, char *buffer)
         get_block(wd->dev, wd->INODE.i_block[0], buf);
         temp = (DIR *)buf;
         char *cp = buf;
-        if(wd->ino == root->ino){
+        if (wd->ino == root->ino) {
                 return 0;
         }
         while (cp < buf + BLKSIZE) {
@@ -159,7 +160,6 @@ int rpwd(MINODE *wd, char *buffer)
                 temp = (DIR *)cp;
         }
         return rpwd(pip, buffer);
-
 }
 
 int is_dir(INODE *ino)

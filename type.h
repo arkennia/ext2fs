@@ -67,7 +67,7 @@ typedef struct minode {
         int dirty; // modified flag
         int mounted; // mounted flag
         struct mount *mntPtr; // mount table pointer
-        // int lock; // ignored for simple FS
+                              // int lock; // ignored for simple FS
 } MINODE;
 
 // Mount Table structure

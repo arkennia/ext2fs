@@ -5,8 +5,8 @@
 #include "util.h"
 
 #include "globals.h"
-#include "type.h"
 #include "mkdir_create.h"
+#include "type.h"
 
 int init()
 {
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
                         chdir(pathname);
                 if (strcmp(cmd, "pwd") == 0)
                         pwd(running->cwd);
-                if(strcmp(cmd, "mkdir") == 0)
+                if (strcmp(cmd, "mkdir") == 0)
                         mkdir_local(pathname);
                 if (strcmp(cmd, "quit") == 0)
                         quit();
