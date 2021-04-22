@@ -15,6 +15,8 @@ add_executable(extfs
         cd_ls_pwd.c
         globals.h
         globals.c
+        mkdir_create.h
+        mkdir_create.c
         )
 set_target_properties(extfs PROPERTIES COMPILE_OPTIONS "-m32" LINK_FLAGS "-m32")
 target_compile_options(extfs PRIVATE -Wall -W -pedantic -pipe -Wno-unused-parameter -ggdb)

@@ -23,5 +23,10 @@ int findmyname(MINODE *parent, u32 myino, char *myname);
 int findino(MINODE *mip, u32 *myino);
 MINODE *mialloc();
 int midalloc(MINODE *mip);
+int decFreeInodes(int dev);
+int tst_bit(char *buf, int bit);
+int set_bit(char *buf, int bit);
+int ialloc(int dev);
+int balloc(int dev);
 
 #endif // UTIL_H
