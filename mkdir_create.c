@@ -5,9 +5,6 @@ int mkdir_local(char *pathname) {
   
   char *base;
   int ino;
-  MINODE *mip;
-  MINODE *pino;
-  MINODE *pip;
   if (strlen(pathname) == 0) {
     printf("No specified pathname!\n");
     return 0;
@@ -23,8 +20,8 @@ int mkdir_local(char *pathname) {
     return 0;
   }
   //dirname must exist and is a DIR
-  pino = getino(parent);
-  pip = iget(dev, pino);
+    MINODE *pino = getino(parent);
+    MINODE *pip = iget(dev, pino);
   if (getino(pathname) != 0) {
     printf("Directory name exists.\n");
     return 0;
