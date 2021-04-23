@@ -266,6 +266,7 @@ int decFreeInodes(int dev)
         gp = (GD *)buf;
         gp->bg_free_inodes_count--;
         put_block(dev, 2, buf);
+        return 0;
 }
 int tst_bit(char *buf, int bit)
 {
@@ -274,6 +275,7 @@ int tst_bit(char *buf, int bit)
 int set_bit(char *buf, int bit)
 {
         buf[bit / 8] |= (1 << (bit % 8));
+        return 0;
 }
 
 int ialloc(int dev)
@@ -306,4 +308,66 @@ int balloc(int dev)
                         return (i + 1);
                 }
         }
+        return 0;
+}
+
+void clr_bit(char *buffer, int bit)
+{
+        buffer[bit/8] &= ~(1 << (bit %8));
+}
+
+void incFreeInodes(int dev)
+{
+        char buffer[BLKSIZE];
+        get_block(dev, 1, buffer); // Get super block
+        sp = (SUPER *)buffer;
+        sp->s_free_inodes_count += 1; // Increment count.
+        put_block(dev, 1, buffer);
+
+        memset(buffer, 0, BLKSIZE); // Clear buffer.
+        get_block(dev, 2, buffer); // Get group descriptor.
+        gp = (GD* ) buffer;
+        gp->bg_free_inodes_count += 1;
+        put_block(dev, 2, buffer);
+}
+
+void idalloc(int dev, int ino)
+{
+        char buffer[BLKSIZE];
+        if (ino > ninodes) {
+                printf("inumber %d out of range.\n", ino);
+                return;
+        }
+        get_block(dev, imap, buffer);
+        clr_bit(buffer, ino - 1);
+        put_block(dev, imap, buffer);
+        incFreeInodes(dev);
+}
+
+void incFreeBlocks(int dev)
+{
+        char buffer[BLKSIZE];
+        get_block(dev, 1, buffer); // Get super block
+        sp = (SUPER *)buffer;
+        sp->s_free_blocks_count += 1; // Increment count.
+        put_block(dev, 1, buffer);
+
+        memset(buffer, 0, BLKSIZE); // Clear buffer.
+        get_block(dev, 2, buffer); // Get group descriptor.
+        gp = (GD* ) buffer;
+        gp->bg_free_blocks_count += 1;
+        put_block(dev, 2, buffer);
+}
+
+void bdalloc(int dev, int bno)
+{
+        char buffer[BLKSIZE];
+        if (bno > nblocks) {
+                printf("bnumber %d out of range.\n", bno);
+                return;
+        }
+        get_block(dev, bmap, buffer);
+        clr_bit(buffer, bno - 1);
+        put_block(dev, bmap, buffer);
+        incFreeInodes(dev);
 }

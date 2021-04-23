@@ -29,4 +29,19 @@ int set_bit(char *buf, int bit);
 int ialloc(int dev);
 int balloc(int dev);
 
+/// Deallocate an inode.
+void idalloc(int dev, int ino);
+
+/// Clear bit in bitmap.
+void clr_bit(char *buffer, int bit);
+
+/// Increment number of free inodes.
+void incFreeInodes(int dev);
+
+/// Dealloactes a disk block.
+void bdalloc(int dev, int bno);
+
+/// Increment the number of free blocks.
+void incFreeBlocks(int dev);
+
 #endif // UTIL_H
