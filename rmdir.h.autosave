@@ -1,9 +1,0 @@
-#ifndef RMDIR_H
-#define RMDIR_H
-
-#include "globals.h"
-
-int rmdir_local(const char *pathname);
-void rm_child(MINODE *parent_mip, char *file_name);
-
-#endif // RMDIR_H
