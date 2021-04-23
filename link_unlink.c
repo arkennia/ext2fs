@@ -1,10 +1,13 @@
 #include "link_unlink.h"
 #include "mkdir_create.h"
 
-int link(char *new_file, char *old_file) {
+int link(char *old_file, char *new_file) {
     //verify old_file exists and is not a DIR;
     int oino = getino(old_file);
-    MINODE *omip = iget(dev, oino);
+    MINODE *omip = iget(dev, oino); 
+    if(!omip){
+        printf("File does not exist\n");
+    }
     if(strcmp(new_file, "") == 0){
         printf("No new file.\n");
     }
@@ -25,18 +28,29 @@ int link(char *new_file, char *old_file) {
         return 0;
     }
     //create new_file with the same inode number of old_file
+    char *temp[BLKSIZE];
+    strcpy(temp, new_file);
     char *parent = dirname(new_file);
-    char *child = basename(new_file);
-    int pino = getino(parent);
-    MINODE *pmip = iget(dev, pino);
+    char *child = basename(temp);
+    //link /linkFile /DIR1/new
+    printf("Child: %s", child);
+    int pino = getino(parent); 
+    MINODE *pmip = iget(dev, pino); 
     if(!pmip){
         printf("This file has no parent.\n");
+        return 0;
+    }
+    if(!S_ISDIR(pmip->INODE.i_mode)){
+        printf("Must be a directory.\n");
+        return 0;
     }
     //create entry in new parent DIR with same inode number of old_file
-    enter_name(pmip, oino, child);
+    enter_child(pmip, oino, child);
     omip->INODE.i_links_count++; //increment INODE'S links_count by 1
-    omip->dirty = 1;             //for write back by iput(omip)
+    omip->dirty = 1; 
+    pmip->INODE.i_atime = time(0L);
+    pmip->dirty = 1;            //for write back by iput(omip)
     iput(omip);
     iput(pmip);
+    return 1;
 }
-

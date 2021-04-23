@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
                 if (strcmp(cmd, "mkdir") == 0)
                         mkdir_local(pathname);
                 if(strcmp(cmd, "link") == 0)
-                        link(otherPathname, pathname);
+                        link(pathname, otherPathname);
                 if (strcmp(cmd, "creat") == 0)
                         creat_local(pathname);
                 if (strcmp(cmd, "rmdir") == 0)

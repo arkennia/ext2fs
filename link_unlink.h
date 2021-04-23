@@ -2,6 +2,6 @@
 #define LINK_UNLINK_H
 #include "globals.h"
 
-int link(char *new_file, char *old_file);
+int link(char *old_file, char *new_file);
 int unlink(char *pathname);
 #endif
