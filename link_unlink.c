@@ -1,5 +1,6 @@
 #include "link_unlink.h"
 #include "mkdir_create.h"
+#include "rmdir.h"
 
 int link(char *old_file, char *new_file) {
     //verify old_file exists and is not a DIR;
@@ -53,4 +54,33 @@ int link(char *old_file, char *new_file) {
     iput(omip);
     iput(pmip);
     return 1;
+}
+int unlink(char *pathname){
+    // get filenames's minode
+    int ino = getino(pathname);
+    MINODE *mip = iget(running->cwd->dev, ino);
+    //check it's a REG or symbolic LNK file; can not be a DIR
+   if(S_ISDIR(mip->INODE.i_mode)){
+       printf("Cannot be a directory");
+   }
+   char *temp[256];
+   //remove name entry from parent DIR's data block
+   strcmp(temp, pathname);
+   char *parent = dirname(pathname);
+   char *child = basename(temp);
+   int pino = getino(parent);
+   MINODE* pmip = iget(dev, pino);
+   //rm_child(pmip, ino, child);
+    pmip->dirty = 1;
+    iput(pmip);
+    //decrement INODE'S link_count by 1
+    mip->INODE.i_links_count --;
+    if(mip->INODE.i_links_count > 0){
+        mip->dirty = 1; //for write INODE back to disk
+    }
+    else{//if links_count = 0; remove filename
+    
+
+    }
+
 }
