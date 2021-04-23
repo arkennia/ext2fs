@@ -7,6 +7,7 @@
 #include "globals.h"
 #include "mkdir_create.h"
 #include "type.h"
+#include "link_unlink.h"
 
 int init()
 {
@@ -59,7 +60,7 @@ char *disk = "diskimage";
 int main(int argc, char *argv[])
 {
         char buf[BLKSIZE];
-        char line[128], cmd[32], pathname[128];
+        char line[128], cmd[32], pathname[128], otherPathname[128];
 
         if (argc > 1)
                 disk = argv[1];
@@ -115,7 +116,7 @@ int main(int argc, char *argv[])
                         continue;
                 pathname[0] = 0;
 
-                sscanf(line, "%s %s", cmd, pathname);
+                sscanf(line, "%s %s %s", cmd, pathname, otherPathname);
                 printf("cmd=%s pathname=%s\n", cmd, pathname);
 
                 if (strcmp(cmd, "ls") == 0)
@@ -126,6 +127,8 @@ int main(int argc, char *argv[])
                         pwd(running->cwd);
                 if (strcmp(cmd, "mkdir") == 0)
                         mkdir_local(pathname);
+                if(strcmp(cmd, "link") == 0)
+                        link(otherPathname, pathname);
                 if (strcmp(cmd, "quit") == 0)
                         quit();
         }
