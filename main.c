@@ -1,12 +1,13 @@
 /****************************************************************************
  *                   KCW testing ext2 file system                            *
  *****************************************************************************/
+
 #include "cd_ls_pwd.h"
 #include "util.h"
-
 #include "globals.h"
 #include "mkdir_create.h"
 #include "type.h"
+#include "rmdir.h"
 
 int init()
 {
@@ -107,7 +108,7 @@ int main(int argc, char *argv[])
         }
 
         while (1) {
-                printf("input command : [ls|cd|pwd|mkdir|creat|quit] ");
+                printf("input command : [ls|cd|pwd|mkdir|creat|rmdir|quit] ");
                 fgets(line, 128, stdin);
                 line[strlen(line) - 1] = 0;
 
@@ -128,6 +129,8 @@ int main(int argc, char *argv[])
                         mkdir_local(pathname);
                 if (strcmp(cmd, "creat") == 0)
                         creat_local(pathname);
+                if (strcmp(cmd, "rmdir") == 0)
+                        rmdir_local(pathname);
                 if (strcmp(cmd, "quit") == 0)
                         quit();
         }

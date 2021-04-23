@@ -313,7 +313,7 @@ int balloc(int dev)
 
 void clr_bit(char *buffer, int bit)
 {
-        buffer[bit/8] &= ~(1 << bit %8);
+        buffer[bit/8] &= ~(1 << (bit %8));
 }
 
 void incFreeInodes(int dev)
