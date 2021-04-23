@@ -172,3 +172,69 @@ int enter_child(MINODE *mip, int ino, char *name)
 
         return 1;
 }
+
+// Creates a regular file.
+int creat_local(const char *pathname)
+{
+        char *base;
+        int ino;
+        if (strlen(pathname) == 0) {
+                printf("No specified pathname!\n");
+                return 0;
+        }
+        char pathnameTemp[BLKSIZE];
+        strcpy(pathnameTemp, pathname);
+        // seperating basename and parentname
+        char *parent = dirname(pathnameTemp);
+        base = basename(pathnameTemp);
+        ino = getino(parent);
+        if (ino == 0) {
+                printf("Not a valid path.\n");
+                return 0;
+        }
+        // makes sure you'r trying to make this in a directory.
+        int pino = getino(parent);
+        MINODE *pip = iget(dev, pino);
+        if (getino(pathnameTemp) != 0) {
+                printf("File name exists.\n");
+                return 0;
+        }
+        if (!S_ISDIR(pip->INODE.i_mode)) {
+                printf("Not a valid directory name.\n");
+                return 0;
+        }
+        kcreat(pip, base);
+        return 0;
+}
+
+int kcreat(MINODE *pmip, char *basePath)
+{
+        int ino = ialloc(running->cwd->dev);
+        // load INODE into minode
+        MINODE *mip = iget(running->cwd->dev, ino);
+        // initialize mip->INODE as a DIR INODE;
+        ip = &(mip->INODE);
+        ip->i_size = 0;
+
+        ip->i_atime = time(0L);
+        ip->i_ctime = time(0L);
+        ip->i_mtime = time(0L);
+
+        ip->i_mode = FILE_MODE;
+
+        ip->i_uid = running->uid;
+        ip->i_gid = running->gid;
+
+        ip->i_links_count = 2;
+
+        ip->i_blocks = 2;
+        // making first i_block blk
+//        int i = 1;
+        mip->dirty = 1;
+
+        iput(mip);
+        // enters ino, basename asd a dir_entry to the parent INODE
+        enter_child(pmip, ino, basePath);
+
+        return 1;
+}
