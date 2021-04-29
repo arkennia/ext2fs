@@ -21,6 +21,8 @@ add_executable(extfs
 	rmdir.h
         link_unlink.c 
         link_unlink.h
+        stat.c
+        stat.h
         )
 set_target_properties(extfs PROPERTIES COMPILE_OPTIONS "-m32" LINK_FLAGS "-m32")
 target_compile_options(extfs PRIVATE -Wall -W -pedantic -pipe -Wno-unused-parameter -ggdb)

@@ -9,6 +9,7 @@
 #include "type.h"
 #include "link_unlink.h"
 #include "rmdir.h"
+#include "stat.h"
 
 int init()
 {
@@ -109,7 +110,7 @@ int main(int argc, char *argv[])
         }
 
         while (1) {
-                printf("input command : [ls|cd|pwd|mkdir|creat|rmdir|quit] ");
+                printf("input command : [ls|cd|pwd|mkdir|creat|rmdir|link|unlink|symlink|quit] ");
                 fgets(line, 128, stdin);
                 line[strlen(line) - 1] = 0;
 
@@ -130,10 +131,16 @@ int main(int argc, char *argv[])
                         mkdir_local(pathname);
                 if(strcmp(cmd, "link") == 0)
                         link(pathname, otherPathname);
+                if(strcmp(cmd, "unlink") == 0)
+                        unlink(pathname);
+                if(strcmp(cmd, "symlink") == 0)
+                        symlink(pathname, otherPathname);
                 if (strcmp(cmd, "creat") == 0)
                         creat_local(pathname);
                 if (strcmp(cmd, "rmdir") == 0)
                         rmdir_local(pathname);
+                if(strcmp(cmd, "stat") == 0)
+                        local_stat(pathname);
                 if (strcmp(cmd, "quit") == 0)
                         quit();
         }
