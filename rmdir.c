@@ -73,6 +73,7 @@ void rm_child(MINODE *parent_mip, char *file_name)
         } else if (pos == total_entries) {
                 prevDir->rec_len += dp->rec_len;
         } else {
+                cp = buf;
                 while (cp + dp->rec_len < buf + BLKSIZE) {
                         if (strcmp (dp->name, file_name) == 0) {
                                 break;
