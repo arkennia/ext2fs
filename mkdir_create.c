@@ -86,16 +86,17 @@ int kmkdir(MINODE *pmip, char *basename)
         dp->inode = pmip->ino;
         dp->rec_len = 1012;
         dp->name_len = 2;
+        
         strcpy(dp->name, "..");
 
         put_block(running->cwd->dev, blk, buf);
         // enters ino, basename asd a dir_entry to the parent INODE
-        enter_child(pmip, ino, basename);
+        enter_child(pmip, ino, basename, EXT2_FT_DIR);
 
         return 1;
 }
 
-int enter_child(MINODE *mip, int ino, char *name)
+int enter_child(MINODE *mip, int ino, char *name, int type)
 {
 
         int i;
@@ -130,8 +131,7 @@ int enter_child(MINODE *mip, int ino, char *name)
                 // dp now points at the last entry in block
                 cp = (char *)dp;
                 ideal_length = 4 * ((8 + dp->name_len + 3) / 4);
-                remain = dp->rec_len
-                         - ideal_length; // remain = LAST entry's rec_len - its ideal_length
+                remain = dp->rec_len  - ideal_length; // remain = LAST entry's rec_len - its ideal_length
                 if (remain >= need_length) {
                         // enter the new entry as the LAST entry and trim the previous entry
                         // entry rec_len to its ideal_length
@@ -144,7 +144,7 @@ int enter_child(MINODE *mip, int ino, char *name)
                         strcpy(dp->name, name);
 
                         dp->inode = ino;
-                        dp->file_type = EXT2_FT_DIR;
+                        dp->file_type = type;
 
                         put_block(dev, tempIno, buf);
                         return 1;
@@ -166,7 +166,7 @@ int enter_child(MINODE *mip, int ino, char *name)
         strcpy(dp->name, name);
         dp->inode = ino;
         dp->rec_len = BLKSIZE;
-        dp->file_type = EXT2_FT_DIR;
+        dp->file_type = type;
         dp->name_len = length;
         put_block(dev, tempIno, buf);
 
@@ -220,7 +220,7 @@ int kcreat(MINODE *pmip, char *basePath)
         ip->i_ctime = time(0L);
         ip->i_mtime = time(0L);
 
-        ip->i_mode = FILE_MODE;
+        ip->i_mode = 0x81A4;
 
         ip->i_uid = running->uid;
         ip->i_gid = running->gid;
@@ -234,7 +234,7 @@ int kcreat(MINODE *pmip, char *basePath)
 
         iput(mip);
         // enters ino, basename asd a dir_entry to the parent INODE
-        enter_child(pmip, ino, basePath);
+        enter_child(pmip, ino, basePath, EXT2_FT_REG_FILE);
 
         return 1;
 }

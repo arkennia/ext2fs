@@ -7,7 +7,10 @@ static char *t1 = "xwrxwrxwr-------"; // modes
 static char *t2 = "----------------"; // dashes
 
 static void get_mode_string(int mode)
-{
+{       
+        if(mode == 0xA1FF){
+                printf("l");
+        }
         for (int i = 8; i >= 0; i--) {
                 if (mode & (1 << i)) // print r|w|x
                         printf("%c", t1[i]);
@@ -42,7 +45,7 @@ int ls_file(MINODE *mip, char *name)
         const long atime = mip->INODE.i_atime;
         char *time = ctime(&atime);
         time[strlen(time) - 1] = '\0';
-        get_mode_string(mip->INODE.i_mode);
+        get_mode_string(mip->INODE.i_mode);    
         printf("%s %d %d %s %s \n", mode_buffer, mip->INODE.i_links_count, mip->INODE.i_size, time,
                name);
         return 0;
