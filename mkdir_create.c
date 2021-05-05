@@ -34,7 +34,7 @@ int mkdir_local(char *pathname)
         return 0;
 }
 
-int kmkdir(MINODE *pmip, char *basename)
+int kmkdir(MINODE *pmip, char *base)
 {
         char *cp;
         char buf[BLKSIZE];
@@ -91,7 +91,7 @@ int kmkdir(MINODE *pmip, char *basename)
 
         put_block(running->cwd->dev, blk, buf);
         // enters ino, basename asd a dir_entry to the parent INODE
-        enter_child(pmip, ino, basename, EXT2_FT_DIR);
+        enter_child(pmip, ino, base, EXT2_FT_DIR);
 
         return 1;
 }
@@ -184,10 +184,12 @@ int creat_local(const char *pathname)
                 return 0;
         }
         char pathnameTemp[BLKSIZE];
+        char pt2[BLKSIZE];
         strcpy(pathnameTemp, pathname);
+        strcpy(pt2, pathname);
         // seperating basename and parentname
         char *parent = dirname(pathnameTemp);
-        base = basename(pathnameTemp);
+        base = basename(pt2);
         ino = getino(parent);
         if (ino == 0) {
                 printf("Not a valid path.\n");
@@ -196,7 +198,7 @@ int creat_local(const char *pathname)
         // makes sure you'r trying to make this in a directory.
         int pino = getino(parent);
         MINODE *pip = iget(dev, pino);
-        if (getino(pathnameTemp) != 0) {
+        if (getino(base) != 0) {
                 printf("File name exists.\n");
                 return 0;
         }
