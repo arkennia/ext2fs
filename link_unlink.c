@@ -126,14 +126,12 @@ int symlink(char *old_file, char *new_file)
         }
         // create entry in new parent DIR with same inode number of old_file
         creat_local(new_file);
-        ino = getino(child);
-         MINODE *mip = iget(dev, ino);
+        ino = getino(new_file);
+        MINODE *mip = iget(dev, ino);
+        mip->INODE.i_mode = 0xA1FF;
+        mip->dirty = 1;
         strcpy(mip->INODE.i_block, old_file);
         iput(mip);
-        omip->INODE.i_links_count++; // increment INODE'S links_count by 1
-        omip->dirty = 1;
-        pmip->INODE.i_atime = time(0);
-        omip->INODE.i_mode = 0xA1FF;
         pmip->dirty = 1; // for write back by iput(omip)
         iput(omip);
         iput(pmip);
@@ -148,7 +146,7 @@ int readLink(char *pathname, char *buffer)
                 return -1;
         }
         MINODE *mip = iget(dev, ino);
-        if (!S_ISLNK(mip->INODE.i_mode)) {
+        if ((mip->INODE.i_mode != 0xA1FF)) {
                 printf("readLINK: not a symlink.\n");
                 return -1;
         }
