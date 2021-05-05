@@ -53,7 +53,7 @@ int ls_file(MINODE *mip, char *name)
 
 int ls_dir(MINODE *mip)
 {
-        printf("ls_dir: list CWD's file names; YOU do it for ls -l\n");
+        printf("ls_dir: list CWD's file names\n");
 
         char buf[BLKSIZE], temp[256];
         DIR *dp;
@@ -92,7 +92,6 @@ int ls(char *pathname)
 {
         int ino = 0;
         printf("ls %s\n", pathname);
-        printf("ls CWD only! YOU do it for ANY pathname\n");
         if (strcmp(pathname, "") == 0)
                 ino = running->cwd->ino;
         else
