@@ -53,7 +53,7 @@ void rm_child(MINODE *parent_mip, char *file_name)
                 cp = buf;
                 while (cp + dp->rec_len <= buf + BLKSIZE) {
                         pos++;
-                        if (strcmp (dp->name, file_name) == 0) {
+                        if (strcmp(dp->name, file_name) == 0) {
                                 block = parent->i_block[i];
                                 break;
                         }
@@ -63,7 +63,7 @@ void rm_child(MINODE *parent_mip, char *file_name)
                 }
         }
         if (block == -1) {
-                printf ("Error rmdir: directory not found.\n");
+                printf("Error rmdir: directory not found.\n");
                 return;
         }
         if (pos == 0) {
@@ -75,7 +75,7 @@ void rm_child(MINODE *parent_mip, char *file_name)
         } else {
                 cp = buf;
                 while (cp + dp->rec_len < buf + BLKSIZE) {
-                        if (strcmp (dp->name, file_name) == 0) {
+                        if (strcmp(dp->name, file_name) == 0) {
                                 break;
                         }
                         prevDir = dp;

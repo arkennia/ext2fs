@@ -3,13 +3,14 @@
  *****************************************************************************/
 
 #include "cd_ls_pwd.h"
-#include "util.h"
 #include "globals.h"
-#include "mkdir_create.h"
-#include "type.h"
 #include "link_unlink.h"
+#include "mkdir_create.h"
 #include "rmdir.h"
 #include "stat.h"
+#include "type.h"
+#include "util.h"
+#include "miscl.h"
 
 int init()
 {
@@ -110,7 +111,7 @@ int main(int argc, char *argv[])
         }
 
         while (1) {
-                printf("input command : [ls|cd|pwd|mkdir|creat|rmdir|link|unlink|symlink|quit] ");
+                printf("input command : [ls|cd|pwd|mkdir|creat|rmdir|link|unlink|symlink|utime|chmod|readlink|quit] ");
                 fgets(line, 128, stdin);
                 line[strlen(line) - 1] = 0;
 
@@ -129,18 +130,29 @@ int main(int argc, char *argv[])
                         pwd(running->cwd);
                 if (strcmp(cmd, "mkdir") == 0)
                         mkdir_local(pathname);
-                if(strcmp(cmd, "link") == 0)
+                if (strcmp(cmd, "link") == 0)
                         link(pathname, otherPathname);
-                if(strcmp(cmd, "unlink") == 0)
+                if (strcmp(cmd, "unlink") == 0)
                         unlink(pathname);
-                if(strcmp(cmd, "symlink") == 0)
+                if (strcmp(cmd, "symlink") == 0)
                         symlink(pathname, otherPathname);
                 if (strcmp(cmd, "creat") == 0)
                         creat_local(pathname);
                 if (strcmp(cmd, "rmdir") == 0)
                         rmdir_local(pathname);
-                if(strcmp(cmd, "stat") == 0)
+                if (strcmp(cmd, "stat") == 0)
                         local_stat(pathname);
+                if (strcmp(cmd, "utime") == 0)
+                        utime_local(pathname);
+                if (strcmp(cmd, "chmod") == 0){
+                        char *ptr = NULL;
+                        chmod_local(otherPathname, strtol(pathname, &ptr, 8));
+                }
+                if (strcmp(cmd, "readlink") == 0) {
+                        char buffer[BLKSIZE];
+                        int s = readLink(pathname, buffer);
+                        printf("Link: %s Link Size: %d\n", buffer, s);
+                }
                 if (strcmp(cmd, "quit") == 0)
                         quit();
         }

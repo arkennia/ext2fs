@@ -86,7 +86,7 @@ int kmkdir(MINODE *pmip, char *basename)
         dp->inode = pmip->ino;
         dp->rec_len = 1012;
         dp->name_len = 2;
-        
+
         strcpy(dp->name, "..");
 
         put_block(running->cwd->dev, blk, buf);
@@ -131,7 +131,8 @@ int enter_child(MINODE *mip, int ino, char *name, int type)
                 // dp now points at the last entry in block
                 cp = (char *)dp;
                 ideal_length = 4 * ((8 + dp->name_len + 3) / 4);
-                remain = dp->rec_len  - ideal_length; // remain = LAST entry's rec_len - its ideal_length
+                remain = dp->rec_len
+                         - ideal_length; // remain = LAST entry's rec_len - its ideal_length
                 if (remain >= need_length) {
                         // enter the new entry as the LAST entry and trim the previous entry
                         // entry rec_len to its ideal_length
@@ -229,7 +230,7 @@ int kcreat(MINODE *pmip, char *basePath)
 
         ip->i_blocks = 2;
         // making first i_block blk
-//        int i = 1;
+        //        int i = 1;
         mip->dirty = 1;
 
         iput(mip);
