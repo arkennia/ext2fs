@@ -313,7 +313,7 @@ int balloc(int dev)
 
 void clr_bit(char *buffer, int bit)
 {
-        buffer[bit/8] &= ~(1 << (bit %8));
+        buffer[bit / 8] &= ~(1 << (bit % 8));
 }
 
 void incFreeInodes(int dev)
@@ -326,7 +326,7 @@ void incFreeInodes(int dev)
 
         memset(buffer, 0, BLKSIZE); // Clear buffer.
         get_block(dev, 2, buffer); // Get group descriptor.
-        gp = (GD* ) buffer;
+        gp = (GD *)buffer;
         gp->bg_free_inodes_count += 1;
         put_block(dev, 2, buffer);
 }
@@ -354,7 +354,7 @@ void incFreeBlocks(int dev)
 
         memset(buffer, 0, BLKSIZE); // Clear buffer.
         get_block(dev, 2, buffer); // Get group descriptor.
-        gp = (GD* ) buffer;
+        gp = (GD *)buffer;
         gp->bg_free_blocks_count += 1;
         put_block(dev, 2, buffer);
 }

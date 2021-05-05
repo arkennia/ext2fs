@@ -3,13 +3,13 @@
  *****************************************************************************/
 
 #include "cd_ls_pwd.h"
-#include "util.h"
 #include "globals.h"
-#include "mkdir_create.h"
-#include "type.h"
 #include "link_unlink.h"
+#include "mkdir_create.h"
 #include "rmdir.h"
 #include "stat.h"
+#include "type.h"
+#include "util.h"
 
 int init()
 {
@@ -129,17 +129,17 @@ int main(int argc, char *argv[])
                         pwd(running->cwd);
                 if (strcmp(cmd, "mkdir") == 0)
                         mkdir_local(pathname);
-                if(strcmp(cmd, "link") == 0)
+                if (strcmp(cmd, "link") == 0)
                         link(pathname, otherPathname);
-                if(strcmp(cmd, "unlink") == 0)
+                if (strcmp(cmd, "unlink") == 0)
                         unlink(pathname);
-                if(strcmp(cmd, "symlink") == 0)
+                if (strcmp(cmd, "symlink") == 0)
                         symlink(pathname, otherPathname);
                 if (strcmp(cmd, "creat") == 0)
                         creat_local(pathname);
                 if (strcmp(cmd, "rmdir") == 0)
                         rmdir_local(pathname);
-                if(strcmp(cmd, "stat") == 0)
+                if (strcmp(cmd, "stat") == 0)
                         local_stat(pathname);
                 if (strcmp(cmd, "quit") == 0)
                         quit();
