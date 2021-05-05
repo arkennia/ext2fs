@@ -121,7 +121,11 @@ int symlink(char *old_file, char *new_file)
                 return 0;
         }
         // create entry in new parent DIR with same inode number of old_file
-        enter_child(pmip, oino, child, EXT2_FT_SYMLINK);
+        creat_local(new_file);
+        ino = getino(child);
+         MINODE *mip = iget(dev, ino);
+        strcpy(mip->INODE.i_block, old_file);
+        iput(mip);
         omip->INODE.i_links_count++; // increment INODE'S links_count by 1
         omip->dirty = 1;
         pmip->INODE.i_atime = time(0);
