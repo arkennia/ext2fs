@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
         }
 
         while (1) {
-                printf("input command : [ls|cd|pwd|mkdir|creat|rmdir|link|unlink|symlink|utime|chmod|quit] ");
+                printf("input command : [ls|cd|pwd|mkdir|creat|rmdir|link|unlink|symlink|utime|chmod|readlink|quit] ");
                 fgets(line, 128, stdin);
                 line[strlen(line) - 1] = 0;
 
@@ -147,6 +147,11 @@ int main(int argc, char *argv[])
                 if (strcmp(cmd, "chmod") == 0){
                         char *ptr = NULL;
                         chmod_local(otherPathname, strtol(pathname, &ptr, 8));
+                }
+                if (strcmp(cmd, "readlink") == 0) {
+                        char buffer[BLKSIZE];
+                        int s = readLink(pathname, buffer);
+                        printf("Link: %s Link Size: %d\n", buffer, s);
                 }
                 if (strcmp(cmd, "quit") == 0)
                         quit();

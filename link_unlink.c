@@ -104,7 +104,7 @@ int symlink(char *old_file, char *new_file)
                 return 0;
         }
         // create new_file with the same inode number of old_file
-        char *temp[BLKSIZE];
+        char temp[BLKSIZE];
         strcpy(temp, new_file);
         char *parent = dirname(new_file);
         char *child = basename(temp);
@@ -126,7 +126,20 @@ int symlink(char *old_file, char *new_file)
         iput(pmip);
         return 1;
 }
+
 int readLink(char *pathname, char *buffer)
 {
-        // only for symlink
+        int ino = getino(pathname);
+        if (ino == 0) {
+                printf("readLink: file not found.\n");
+                return -1;
+        }
+        MINODE *mip = iget(dev, ino);
+        if (!S_ISLNK(mip->INODE.i_mode)) {
+                printf("readLINK: not a symlink.\n");
+                return -1;
+        }
+        strcpy(buffer, mip->INODE.i_block);
+        strcat(buffer, "\0");
+        return strlen(buffer);
 }

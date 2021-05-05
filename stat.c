@@ -29,6 +29,9 @@ int local_stat(char *pathname)
         printf("Dev: %d\n", mip->dev);
         printf("Ino: %d\n", mip->ino);
         printf("UID: %d\n", mip->INODE.i_uid);
+        printf("Access Time: %s", ctime(&mip->INODE.i_atime));
+        printf("Change Time: %s", ctime(&mip->INODE.i_ctime));
+        printf("Modify Time: %s", ctime(&mip->INODE.i_mtime));
         // guid and time
         iput(mip);
         return 0;
