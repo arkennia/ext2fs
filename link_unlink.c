@@ -77,14 +77,18 @@ int unlink(char *pathname)
         // decrement INODE'S link_count by 1
         mip->INODE.i_links_count--;
         if(mip->INODE.i_links_count > 0){
-            mip->dirty = 1; //for write INODE back to disk
+                mip->dirty = 1; //for write INODE back to disk
+                iput(mip);
         }
-       else{
-
-        
-       }
-        // }
-        iput(mip);
+        else{//if links_count = 0; remove filename
+                for(int i = 0; i < 12; i++) {
+                        if (mip->INODE.i_block[i] != 0) {
+                                bdalloc(dev, mip->INODE.i_block[i]);
+                        }
+                }
+                midalloc(mip);
+        }
+        return 0;
 }
 
 int symlink(char *old_file, char *new_file)
