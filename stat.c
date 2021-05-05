@@ -1,6 +1,7 @@
 #include "stat.h"
 int local_stat(char *pathname)
 {
+        //checking pathname is correct
         if (strlen(pathname) == 0) {
                 printf("No specified pathname!\n");
                 return 0;
@@ -23,16 +24,17 @@ int local_stat(char *pathname)
         if (S_ISLNK(mip->INODE.i_mode)) {
                 printf("Is link\n");
         }
+        //printing out contents
         printf("Size: %d\n", mip->INODE.i_size);
         printf("Blocks: %d\n", mip->INODE.i_blocks);
         printf("Links: %d\n", mip->INODE.i_links_count);
         printf("Dev: %d\n", mip->dev);
         printf("Ino: %d\n", mip->ino);
         printf("UID: %d\n", mip->INODE.i_uid);
+        printf("GID: %d\n", mip->INODE.i_gid);
         printf("Access Time: %s", ctime(&mip->INODE.i_atime));
         printf("Change Time: %s", ctime(&mip->INODE.i_ctime));
         printf("Modify Time: %s", ctime(&mip->INODE.i_mtime));
-        // guid and time
         iput(mip);
         return 0;
 }
