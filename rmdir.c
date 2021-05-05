@@ -62,10 +62,6 @@ void rm_child(MINODE *parent_mip, char *file_name)
                         dp = (DIR *)cp;
                 }
         }
-        if (block == -1) {
-                printf("Error rmdir: directory not found.\n");
-                return;
-        }
         if (pos == 0) {
                 bdalloc(dev, block);
                 parent_mip->INODE.i_size = parent_mip->INODE.i_size - BLKSIZE;

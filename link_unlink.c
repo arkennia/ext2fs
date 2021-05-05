@@ -75,12 +75,14 @@ int unlink(char *pathname)
         iput(pmip);
         // decrement INODE'S link_count by 1
         mip->INODE.i_links_count--;
-        // if(mip->INODE.i_links_count > 0){
-        //     mip->dirty = 1; //for write INODE back to disk
-        // }
-        // else{//if links_count = 0; remove filename
+        if(mip->INODE.i_links_count > 0){
+            mip->dirty = 1; //for write INODE back to disk
+        }
+       else{
 
-        // }
+        
+       }
+        iput(mip);
 }
 int symlink(char *old_file, char *new_file)
 {
