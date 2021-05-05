@@ -54,6 +54,7 @@ int link(char *old_file, char *new_file)
         iput(pmip);
         return 1;
 }
+
 int unlink(char *pathname)
 {
         // get filenames's minode
@@ -63,9 +64,9 @@ int unlink(char *pathname)
         if (S_ISDIR(mip->INODE.i_mode)) {
                 printf("Cannot be a directory");
         }
-        char *temp[256];
+        char temp[256];
         // remove name entry from parent DIR's data block
-        strcmp(temp, pathname);
+        strcpy(temp, pathname);
         char *parent = dirname(pathname);
         char *child = basename(temp);
         int pino = getino(parent);
@@ -81,7 +82,9 @@ int unlink(char *pathname)
         // else{//if links_count = 0; remove filename
 
         // }
+        iput(mip);
 }
+
 int symlink(char *old_file, char *new_file)
 {
         // verify old_file exists and is not a DIR;
