@@ -115,6 +115,8 @@ int symlink(char *old_file, char *new_file)
         // create new_file with the same inode number of old_file
         char temp[BLKSIZE];
         strcpy(temp, new_file);
+        char temp2[BLKSIZE];
+        strcpy(temp2, new_file);
         char *parent = dirname(new_file);
         char *child = basename(temp);
         // link /linkFile /DIR1/new
@@ -125,8 +127,8 @@ int symlink(char *old_file, char *new_file)
                 return 0;
         }
         // create entry in new parent DIR with same inode number of old_file
-        creat_local(new_file);
-        ino = getino(new_file);
+        creat_local(temp2);
+        ino = getino(temp2);
         MINODE *mip = iget(dev, ino);
         mip->INODE.i_mode = 0xA1FF;
         mip->dirty = 1;
