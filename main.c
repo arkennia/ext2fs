@@ -10,6 +10,7 @@
 #include "stat.h"
 #include "type.h"
 #include "util.h"
+#include "miscl.h"
 
 int init()
 {
@@ -110,7 +111,7 @@ int main(int argc, char *argv[])
         }
 
         while (1) {
-                printf("input command : [ls|cd|pwd|mkdir|creat|rmdir|link|unlink|symlink|quit] ");
+                printf("input command : [ls|cd|pwd|mkdir|creat|rmdir|link|unlink|symlink|utime|chmod|quit] ");
                 fgets(line, 128, stdin);
                 line[strlen(line) - 1] = 0;
 
@@ -141,6 +142,12 @@ int main(int argc, char *argv[])
                         rmdir_local(pathname);
                 if (strcmp(cmd, "stat") == 0)
                         local_stat(pathname);
+                if (strcmp(cmd, "utime") == 0)
+                        utime_local(pathname);
+                if (strcmp(cmd, "chmod") == 0){
+                        char *ptr = NULL;
+                        chmod_local(otherPathname, strtol(pathname, &ptr, 8));
+                }
                 if (strcmp(cmd, "quit") == 0)
                         quit();
         }

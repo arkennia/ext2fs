@@ -10,7 +10,7 @@ void chmod_local(char *pathname, int mode)
                 return;
         }
         MINODE *mip = iget(dev, ino);
-        mip->INODE.i_mode = mode;
+        mip->INODE.i_mode |= mode;
         mip->INODE.i_ctime = time(NULL);
         mip->dirty = 1;
         iput(mip);
